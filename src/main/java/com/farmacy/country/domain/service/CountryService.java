@@ -9,6 +9,6 @@ public interface CountryService {
     void createCountry(Country country);
     void updateCountry(Country country);
     Country deleteCountry(String id);
-    Optional<Country> findCountryById(String id);
+    Optional<Country> findCountryById(int id);
     Optional<List<Country>> findAllCountry();
 }

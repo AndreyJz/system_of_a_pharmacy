@@ -10,6 +10,6 @@ public class Main {
         CountryService cs = new CountryRepository();
         SaveCountryUC scuc = new SaveCountryUC(cs);
         CountryUI uiCountry = new CountryUI(scuc);
-        uiCountry.frmRegCountry();
+        uiCountry.CreateCountry();
     }
 }

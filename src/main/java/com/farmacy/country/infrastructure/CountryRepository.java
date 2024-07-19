@@ -3,6 +3,9 @@ package com.farmacy.country.infrastructure;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -52,15 +55,42 @@ public class CountryRepository implements CountryService {
     }
 
     @Override
-    public Optional<Country> findCountryById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findCountryById'");
+    public Optional<Country> findCountryById(int id) {
+        String query = "SELECT id, country FROM countries WHERE id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        Country country = new Country(rs.getInt("id"), rs.getString("country"));
+                        return Optional.of(country);
+                    }
+                }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
+
+
 
     @Override
     public Optional<List<Country>> findAllCountry() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAllCountry'");
+        String query = "SELECT country FROM countries";
+        List<Country> countries = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Country country = new Country();
+                    country.setName(rs.getString("country"));
+                    countries.add(country);
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return Optional.empty();
     }
 
 }
