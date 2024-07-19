@@ -39,13 +39,26 @@ public class CountryRepository implements CountryService {
             ps.executeUpdate();
         } catch (Exception e) {
             System.out.println("hola soy un hp error");
+            e.printStackTrace();
         }
     }
 
     @Override
     public void updateCountry(Country country) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateCountry'");
+        String query = "UPDATE countries SET country = ? WHERE id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, country.getName());
+            ps.setInt(2, country.getId());
+            
+            int updatedRows = ps.executeUpdate();
+            if (updatedRows > 0) {
+                System.out.println("Country with ID " + country.getId() + " updated successfully.");
+            } else {
+                System.out.println("Failed to update country with ID " + country.getId() + ".");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -75,22 +88,23 @@ public class CountryRepository implements CountryService {
 
 
     @Override
-    public Optional<List<Country>> findAllCountry() {
-        String query = "SELECT country FROM countries";
+    public List<Country> findAllCountry() {
+        String query = "SELECT id,country FROM countries";
         List<Country> countries = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+                while (rs.next()) {
                     Country country = new Country();
+                    country.setId(rs.getInt("id"));
                     country.setName(rs.getString("country"));
                     countries.add(country);
                 }
             }
         } catch (Exception e) {
-            // TODO: handle exception
+            System.out.println("soy un hp error");
         }
-        return Optional.empty();
+        return countries;
     }
 
 }

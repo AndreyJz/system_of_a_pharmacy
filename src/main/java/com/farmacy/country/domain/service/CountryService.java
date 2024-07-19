@@ -10,5 +10,5 @@ public interface CountryService {
     void updateCountry(Country country);
     Country deleteCountry(String id);
     Optional<Country> findCountryById(int id);
-    Optional<List<Country>> findAllCountry();
+    List<Country> findAllCountry();
 }

@@ -13,7 +13,7 @@ public class FindCountriesUC {
         this.countryService = countryService;
     }
 
-    public Optional<List<Country>> execute(){
+    public List<Country> execute(){
         return countryService.findAllCountry();
     }
 }
