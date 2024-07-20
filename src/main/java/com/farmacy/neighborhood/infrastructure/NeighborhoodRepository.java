@@ -1,4 +1,4 @@
-package com.farmacy.city.infrastructure;
+package com.farmacy.neighborhood.infrastructure;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import com.farmacy.city.domain.entity.City;
-import com.farmacy.city.domain.service.CityService;
+import com.farmacy.neighborhood.domain.service.NeighborhoodService;
+import com.farmacy.neighborhood.domain.entity.Neighborhood;
 
-public class CityRepository implements CityService {
+public class NeighborhoodRepository implements NeighborhoodService {
     private Connection connection;
 
-    public CityRepository() {
+    public NeighborhoodRepository() {
         try {
             Properties props = new Properties();
             props.load(getClass().getClassLoader().getResourceAsStream("configdb.properties"));
@@ -30,13 +30,13 @@ public class CityRepository implements CityService {
     }
 
     @Override
-    public void createCity(City city) {
+    public void createNeighborhood(Neighborhood neighborhood) {
         try {
-            String query = "INSERT INTO cities (city,country) VALUES (?,?)";
+            String query = "INSERT INTO neighborhoods (neighborhood,city) VALUES (?,?)";
             PreparedStatement ps = connection.prepareStatement(query);
 
-            ps.setString(1, city.getName());
-            ps.setInt(2, city.getIdCountry());
+            ps.setString(1, neighborhood.getName());
+            ps.setInt(2, neighborhood.getIdCity());
             ps.executeUpdate();
         } catch (Exception e) {
             System.out.println("hola soy un hp error");
@@ -44,17 +44,17 @@ public class CityRepository implements CityService {
     }
 
     @Override
-    public void updateCity(City city) {
-        String query = "UPDATE cities SET city = ? WHERE id = ?";
+    public void updateNeighborhood(Neighborhood neighborhood) {
+        String query = "UPDATE neighborhoods SET neighborhood = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, city.getName());
-            ps.setInt(2, city.getId());
+            ps.setString(1, neighborhood.getName());
+            ps.setInt(2, neighborhood.getId());
             
             int updatedRows = ps.executeUpdate();
             if (updatedRows > 0) {
-                System.out.println("Country with ID " + city.getId() + " updated successfully.");
+                System.out.println("Neighborhood with ID " + neighborhood.getId() + " updated successfully.");
             } else {
-                System.out.println("Failed to update country with ID " + city.getId() + ".");
+                System.out.println("Failed to update neighborhood with ID " + neighborhood.getId() + ".");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,8 +62,8 @@ public class CityRepository implements CityService {
     }
 
     @Override
-    public City deleteCity(int id) {
-        String query = "DELETE FROM cities WHERE id = ?";
+    public Neighborhood deleteNeighborhood(int id) {
+        String query = "DELETE FROM neighborhoods WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, id);
@@ -76,15 +76,15 @@ public class CityRepository implements CityService {
     }
 
     @Override
-    public Optional<City> findCityById(int id) {
-        String query = "SELECT id, city, country FROM cities WHERE id = ?";
+    public Optional<Neighborhood> findNeighborhoodById(int id) {
+        String query = "SELECT id, neighborhood, city FROM neighborhoods WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        City city = new City(rs.getInt("id"), rs.getString("city"), rs.getInt("country"));
-                        return Optional.of(city);
+                        Neighborhood neighborhood = new Neighborhood(rs.getInt("id"), rs.getString("neighborhood"), rs.getInt("city"));
+                        return Optional.of(neighborhood);
                     }
                 }
         } catch (SQLException e) {
@@ -94,36 +94,37 @@ public class CityRepository implements CityService {
     }
 
     @Override
-    public List<City> findAllCities() {
-        String query = "SELECT id,city,country FROM cities";
-        List<City> cities = new ArrayList<>();
+    public List<Neighborhood> findAllNeighborhoods() {
+        String query = "SELECT id,neighborhood,city FROM neighborhoods";
+        List<Neighborhood> neighborhoods = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    City city = new City();
-                    city.setId(rs.getInt("id"));
-                    city.setName(rs.getString("city"));
-                    city.setIdCountry(rs.getInt("country"));
-                    cities.add(city);
+                    Neighborhood neighborhood = new Neighborhood();
+                    neighborhood.setId(rs.getInt("id"));
+                    neighborhood.setName(rs.getString("neighborhood"));
+                    neighborhood.setIdCity(rs.getInt("city"));
+                    neighborhoods.add(neighborhood);
                 }
             }
         } catch (Exception e) {
             System.out.println("soy un hp error");
         }
-        return cities;
+        return neighborhoods;
     }
 
+
     @Override
-    public Optional<City> findCityByName (String name) {
-        String query = "SELECT id,city,country FROM cities WHERE city = ?";
+    public Optional<Neighborhood> findNeighborhoodByName (String name) {
+        String query = "SELECT id,neighborhood,city FROM neighborhoods WHERE neighborhood = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    City city = new City(rs.getInt("id"), rs.getString("city"), rs.getInt("country"));
-                    return Optional.of(city);
+                    Neighborhood neihgborhood = new Neighborhood(rs.getInt("id"), rs.getString("neighborhood"), rs.getInt("city"));
+                    return Optional.of(neihgborhood);
                 }
             }
         } catch (Exception e) {
