@@ -8,7 +8,8 @@ import com.farmacy.country.domain.entity.Country;
 public interface CountryService {
     void createCountry(Country country);
     void updateCountry(Country country);
-    Country deleteCountry(String id);
+    Country deleteCountry(int id);
     Optional<Country> findCountryById(int id);
     List<Country> findAllCountry();
+    Optional<Country> findCountryByName(String name);
 }

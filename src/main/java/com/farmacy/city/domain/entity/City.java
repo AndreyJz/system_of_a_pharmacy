@@ -6,6 +6,11 @@ public class City {
     private int idCountry;
     public City() {
     }
+    public City(int id, String city, int idCountry) {
+        this.id = id;
+        this.name = city;
+        this.idCountry = idCountry;
+    }
     public int getId() {
         return id;
     }

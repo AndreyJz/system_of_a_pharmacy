@@ -62,9 +62,17 @@ public class CountryRepository implements CountryService {
     }
 
     @Override
-    public Country deleteCountry(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteCountry'");
+    public Country deleteCountry(int id) {
+        String query = "DELETE FROM countries WHERE id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("hola, soy un hp error");
+        }
+        return null;
     }
 
     @Override
@@ -105,6 +113,25 @@ public class CountryRepository implements CountryService {
             System.out.println("soy un hp error");
         }
         return countries;
+    }
+
+    @Override
+    public Optional<Country> findCountryByName(String name) {
+        String query = "SELECT id, country FROM countries WHERE country = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Country country = new Country(rs.getInt("id"), rs.getString("country"));
+                    return Optional.of(country);
+                }
+            }
+        } catch (Exception e) {
+            e.addSuppressed(e);
+            System.out.println("hola soy un hp error");
+        }
+        return Optional.empty();
     }
 
 }

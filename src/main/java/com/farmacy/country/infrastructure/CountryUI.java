@@ -24,8 +24,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import com.farmacy.country.aplication.DeleteCountryUC;
 import com.farmacy.country.aplication.FindCountriesUC;
 import com.farmacy.country.aplication.FindCountryByIdUC;
+import com.farmacy.country.aplication.FindCountryByNameUc;
 import com.farmacy.country.aplication.SaveCountryUC;
 import com.farmacy.country.aplication.UpdateCountryUC;
 import com.farmacy.country.domain.entity.Country;
@@ -35,7 +37,10 @@ public class CountryUI {
     private UpdateCountryUC updateCountryUC;
     private FindCountryByIdUC findCountryByIdUC;
     private FindCountriesUC findCountriesUC;
-    private int idUser;
+    private DeleteCountryUC deleteCountryUC;
+    private FindCountryByNameUc findCountryByNameUc;
+    private int idCountry;
+    private String nameCountry;
 
     public CountryUI(SaveCountryUC createCountryUC) {
         this.createCountryUC = createCountryUC;
@@ -53,9 +58,24 @@ public class CountryUI {
         this.updateCountryUC = updateCountryUC;
     }
 
-    public CountryUI(UpdateCountryUC ucuc, FindCountriesUC fcsuc) {
+    public CountryUI(UpdateCountryUC ucuc, FindCountriesUC fcsuc, FindCountryByNameUc fciduc) {
         this.updateCountryUC = ucuc;
         this.findCountriesUC = fcsuc;
+        this.findCountryByNameUc = fciduc;
+    }
+
+    public CountryUI(DeleteCountryUC deleteCountryUC) {
+        this.deleteCountryUC = deleteCountryUC;
+    }
+
+    public CountryUI(DeleteCountryUC dcuc, FindCountriesUC fcsuc, FindCountryByNameUc fciduc) {
+        this.deleteCountryUC = dcuc;
+        this.findCountriesUC = fcsuc;
+        this.findCountryByNameUc = fciduc;
+    }
+
+    public CountryUI(FindCountryByNameUc findCountryByNameUc) {
+        this.findCountryByNameUc = findCountryByNameUc;
     }
 
     public void CreateCountry() {
@@ -111,6 +131,48 @@ public class CountryUI {
         myFrame.setLocationRelativeTo(null);
 
         JPanel myPanel = new JPanel();
+        JButton sendButton = new JButton("Siguiente ->");
+
+        List<Country> countries =  findCountriesUC.execute();
+
+        JComboBox<String> myComboBox = new JComboBox<>();
+        for (Country country : countries) {
+            myComboBox.addItem(country.getName());
+        }
+        
+        // countries.forEach(c -> myComboBox.addItem(c.getName()));
+
+        myPanel.add(myComboBox);
+        myPanel.add(sendButton);
+        myFrame.add(myPanel);
+
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                nameCountry = (String) myComboBox.getSelectedItem();
+                Optional<Country> country = findCountryByNameUc.execute(nameCountry);
+                String newName = JOptionPane.showInputDialog(null, "Insert the new name for the country");
+                country.get().setName(newName);
+                updateCountryUC.execute(country.get());
+                myFrame.dispose();
+                JOptionPane.showMessageDialog(null, "Country has been updated!", null, JOptionPane.PLAIN_MESSAGE);
+            }
+        });
+
+        myFrame.setVisible(true);
+    }
+
+    public void DeleteCountry(){
+        JFrame myFrame = new JFrame();
+
+        // Configurar el JFrame
+        myFrame.setTitle("Interfaz de Usuario");
+        myFrame.setSize(400, 300);
+        myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myFrame.setLocationRelativeTo(null);
+
+        JPanel myPanel = new JPanel();
+        JButton sendButton = new JButton("Siguiente ->");
 
         List<Country> countries =  findCountriesUC.execute();
 
@@ -122,14 +184,26 @@ public class CountryUI {
         // countries.forEach(c -> myComboBox.add(c.getName(), myComboBox));
 
         myPanel.add(myComboBox);
+        myPanel.add(sendButton);
         myFrame.add(myPanel);
+
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                nameCountry = (String) myComboBox.getSelectedItem();
+                Optional<Country> country = findCountryByNameUc.execute(nameCountry);
+                deleteCountryUC.execute(country.get().getId());
+                myFrame.dispose();
+                JOptionPane.showMessageDialog(null, "Country has been deleted...", null, JOptionPane.PLAIN_MESSAGE);
+            }
+        });
 
         myFrame.setVisible(true);
     }
 
     public Optional<Country> FindCountryByID() {
-        idUser = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el ID del Usuario: "));
-        Optional<Country> country = findCountryByIdUC.execute(idUser);
+        idCountry = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el ID del Pais: "));
+        Optional<Country> country = findCountryByIdUC.execute(idCountry);
         if (country.isPresent()) {
             JOptionPane.showMessageDialog(null, "País encontrado:\nID: " + country.get().getId() + "\nNombre: " + country.get().getName(),
                     "Información del País", JOptionPane.INFORMATION_MESSAGE);
