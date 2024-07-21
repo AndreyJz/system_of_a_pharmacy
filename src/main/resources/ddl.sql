@@ -26,15 +26,15 @@ CREATE TABLE neighborhoods (
 
 CREATE TABLE idtypes (
     id int AUTO_INCREMENT,
-    doc varchar(20),
+    doc varchar(40),
     CONSTRAINT pk_idtypes_id PRIMARY KEY (id)
 );
 
 CREATE TABLE customers (
     id varchar(20),
     doctype int,
-    name varchar(20),
-    lastname varchar(20),
+    name varchar(30),
+    lastname varchar(30),
     age int,
     birthdate DATE,
     registerdate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

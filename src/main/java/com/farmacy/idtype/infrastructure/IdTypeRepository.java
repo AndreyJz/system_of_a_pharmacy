@@ -1,4 +1,4 @@
-package com.farmacy.city.infrastructure;
+package com.farmacy.idtype.infrastructure;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import com.farmacy.city.domain.entity.City;
-import com.farmacy.city.domain.service.CityService;
+import com.farmacy.idtype.domain.entity.IdType;
+import com.farmacy.idtype.domain.service.IdTypeService;
 
-public class CityRepository implements CityService {
+public class IdTypeRepository implements IdTypeService {
     private Connection connection;
 
-    public CityRepository() {
-        try {
+    public IdTypeRepository(){
+        try{
             Properties props = new Properties();
             props.load(getClass().getClassLoader().getResourceAsStream("configdb.properties"));
             String url = props.getProperty("url");
@@ -30,31 +30,31 @@ public class CityRepository implements CityService {
     }
 
     @Override
-    public void createCity(City city) {
+    public void createIdType(IdType idType) {
         try {
-            String query = "INSERT INTO cities (city,country) VALUES (?,?)";
+            String query = "INSERT INTO idtypes (doc) VALUES (?)";
             PreparedStatement ps = connection.prepareStatement(query);
 
-            ps.setString(1, city.getName());
-            ps.setInt(2, city.getIdCountry());
+            ps.setString(1, idType.getName());
             ps.executeUpdate();
         } catch (Exception e) {
             System.out.println("hola soy un hp error");
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void updateCity(City city) {
-        String query = "UPDATE cities SET city = ? WHERE id = ?";
+    public void updateIdType(IdType idType) {
+        String query = "UPDATE idtypes SET doc = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, city.getName());
-            ps.setInt(2, city.getId());
+            ps.setString(1, idType.getName());
+            ps.setInt(2, idType.getId());
             
             int updatedRows = ps.executeUpdate();
             if (updatedRows > 0) {
-                System.out.println("City with ID " + city.getId() + " updated successfully.");
+                System.out.println("IdType with ID " + idType.getId() + " updated successfully.");
             } else {
-                System.out.println("Failed to update city with ID " + city.getId() + ".");
+                System.out.println("Failed to update country with ID " + idType.getId() + ".");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,8 +62,8 @@ public class CityRepository implements CityService {
     }
 
     @Override
-    public City deleteCity(int id) {
-        String query = "DELETE FROM cities WHERE id = ?";
+    public IdType deleteIdType(int id) {
+        String query = "DELETE FROM idtypes WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, id);
@@ -76,15 +76,15 @@ public class CityRepository implements CityService {
     }
 
     @Override
-    public Optional<City> findCityById(int id) {
-        String query = "SELECT id, city, country FROM cities WHERE id = ?";
+    public Optional<IdType> findIdTypeById(int id) {
+        String query = "SELECT id, doc FROM idtypes WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        City city = new City(rs.getInt("id"), rs.getString("city"), rs.getInt("country"));
-                        return Optional.of(city);
+                        IdType idType = new IdType(rs.getInt("id"), rs.getString("doc"));
+                        return Optional.of(idType);
                     }
                 }
         } catch (SQLException e) {
@@ -93,37 +93,39 @@ public class CityRepository implements CityService {
         return Optional.empty();
     }
 
+
+
     @Override
-    public List<City> findAllCities() {
-        String query = "SELECT id,city,country FROM cities";
-        List<City> cities = new ArrayList<>();
+    public List<IdType> findAllIdType() {
+        String query = "SELECT id,doc FROM idtypes";
+        List<IdType> idtypes = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    City city = new City();
-                    city.setId(rs.getInt("id"));
-                    city.setName(rs.getString("city"));
-                    city.setIdCountry(rs.getInt("countr y"));
-                    cities.add(city);
+                    IdType idType = new IdType();
+                    idType.setId(rs.getInt("id"));
+                    idType.setName(rs.getString("doc"));
+                    idtypes.add(idType);
                 }
             }
         } catch (Exception e) {
-            System.out.println("soy un hp error");
+            e.addSuppressed(e);
+            System.out.println("hola soy un hp error");
         }
-        return cities;
+        return idtypes;
     }
 
     @Override
-    public Optional<City> findCityByName (String name) {
-        String query = "SELECT id,city,country FROM cities WHERE city = ?";
+    public Optional<IdType> findIdTypeByName(String name) {
+        String query = "SELECT id, doc FROM idtypes WHERE doc = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    City city = new City(rs.getInt("id"), rs.getString("city"), rs.getInt("country"));
-                    return Optional.of(city);
+                    IdType idType = new IdType(rs.getInt("id"), rs.getString("doc"));
+                    return Optional.of(idType);
                 }
             }
         } catch (Exception e) {

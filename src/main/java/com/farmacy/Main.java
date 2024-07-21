@@ -27,6 +27,24 @@ import com.farmacy.city.infrastructure.CityRepository;
 import com.farmacy.city.infrastructure.CityUI;
 import com.farmacy.country.infrastructure.CountryRepository;
 import com.farmacy.country.infrastructure.CountryUI;
+import com.farmacy.customer.aplication.CreateCustomerUC;
+import com.farmacy.customer.aplication.DeleteCustomerUC;
+import com.farmacy.customer.aplication.FindCustomerByIdUC;
+import com.farmacy.customer.aplication.FindCustomerByNameUC;
+import com.farmacy.customer.aplication.FindCustomersUC;
+import com.farmacy.customer.aplication.UpdateCustomerUC;
+import com.farmacy.customer.domain.service.CustomerService;
+import com.farmacy.customer.infrastructure.CustomerRepository;
+import com.farmacy.customer.infrastructure.CustomerUI;
+import com.farmacy.idtype.aplication.DeleteIdTypeUC;
+import com.farmacy.idtype.aplication.FindIdTypeByIdUC;
+import com.farmacy.idtype.aplication.FindIdTypeByNameUc;
+import com.farmacy.idtype.aplication.FindIdTypesUC;
+import com.farmacy.idtype.aplication.SaveIdTypeUC;
+import com.farmacy.idtype.aplication.UpdateIdTypeUC;
+import com.farmacy.idtype.domain.service.IdTypeService;
+import com.farmacy.idtype.infrastructure.IdTypeRepository;
+import com.farmacy.idtype.infrastructure.IdTypeUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,12 +52,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Main extends JFrame implements ActionListener {
-    private JButton countryButton, cityButton, neighborhoodButton, hideOptionsButton;
-    private JPanel mainPanel, countryPanel, cityPanel, neighborhoodPanel, mainMenuPanel;
+    private JButton countryButton, cityButton, neighborhoodButton, idTypeButton, customerButton, hideOptionsButton;
+    private JPanel mainPanel, countryPanel, cityPanel, neighborhoodPanel, idTypePanel, customerPanel, mainMenuPanel;
 
     private JButton createCountryButton, listAllCountriesButton, findCountryByIdButton, updateCountryButton, deleteCountryButton, salirCountryButton;
-    private JButton createNeighborhoodButton, findAllNeighborhoodsButton, findNeighborhoodByIdButton, updateNeighborhoodButton, deleteNeighborhoodButton, salirNeighborhoodButton;
     private JButton createCityButton, findAllCitiesButton, findCityByIdButton, updateCityButton, deleteCityButton, salirCityButton;
+    private JButton createNeighborhoodButton, findAllNeighborhoodsButton, findNeighborhoodByIdButton, updateNeighborhoodButton, deleteNeighborhoodButton, salirNeighborhoodButton;
+    private JButton createIdTypeButton, findAllIdTypesButton, findIdTypeByIdButton, updateIdTypeButton, deleteIdTypeButton, salirIdTypeButton;
+    private JButton createCustomerButton, findAllCustomersButton, findCustomerByIdButton, updateCustomerButton, deleteCustomerButton, salirCustomerButton;
 
     public Main() {
         // Configuración del JFrame principal
@@ -62,9 +82,15 @@ public class Main extends JFrame implements ActionListener {
         cityButton.addActionListener(this);
         neighborhoodButton = new JButton("Neighborhood");
         neighborhoodButton.addActionListener(this);
+        idTypeButton = new JButton("idTypes");
+        idTypeButton.addActionListener(this);
+        customerButton = new JButton("Customers");
+        customerButton.addActionListener(this);
         mainMenuPanel.add(countryButton);
         mainMenuPanel.add(cityButton);
         mainMenuPanel.add(neighborhoodButton);
+        mainMenuPanel.add(idTypeButton);
+        mainMenuPanel.add(customerButton);
 
         hideOptionsButton = new JButton("Hide Options");
         hideOptionsButton.addActionListener(this);
@@ -131,7 +157,7 @@ public class Main extends JFrame implements ActionListener {
         cityPanel.add(salirCityButton);
 
 
-        // Crear panel para opciones de ciudad
+        // Crear panel para opciones de neighborhood
         neighborhoodPanel = new JPanel();
         neighborhoodPanel.setLayout(new GridLayout(6, 1, 10, 10)); // 6 filas, 1 columna
 
@@ -159,10 +185,70 @@ public class Main extends JFrame implements ActionListener {
         salirNeighborhoodButton.addActionListener(this);
         neighborhoodPanel.add(salirNeighborhoodButton);
 
+        
+        // Crear panel para opciones de idType
+        idTypePanel = new JPanel();
+        idTypePanel.setLayout(new GridLayout(6, 1, 10, 10)); // 6 filas, 1 columna
+
+        createIdTypeButton = new JButton("Create IdType");
+        createIdTypeButton.addActionListener(this);
+        idTypePanel.add(createIdTypeButton);
+
+        findAllIdTypesButton = new JButton("List of IdTypes");
+        findAllIdTypesButton.addActionListener(this);
+        idTypePanel.add(findAllIdTypesButton);
+
+        findIdTypeByIdButton = new JButton("Search IdType");
+        findIdTypeByIdButton.addActionListener(this);
+        idTypePanel.add(findIdTypeByIdButton);
+
+        updateIdTypeButton = new JButton("Update IdType");
+        updateIdTypeButton.addActionListener(this);
+        idTypePanel.add(updateIdTypeButton);
+
+        deleteIdTypeButton = new JButton("Delete IdType 💀");
+        deleteIdTypeButton.addActionListener(this);
+        idTypePanel.add(deleteIdTypeButton);
+
+        salirIdTypeButton = new JButton("Salir");
+        salirIdTypeButton.addActionListener(this);
+        idTypePanel.add(salirIdTypeButton);
+
+
+        // Crear panel para opciones de customer
+        customerPanel = new JPanel();
+        customerPanel.setLayout(new GridLayout(6, 1, 10, 10)); // 6 filas, 1 columna
+
+        createCustomerButton = new JButton("Create Customer");
+        createCustomerButton.addActionListener(this);
+        customerPanel.add(createCustomerButton);
+
+        findAllCustomersButton = new JButton("List of Customers");
+        findAllCustomersButton.addActionListener(this);
+        customerPanel.add(findAllCustomersButton);
+
+        findCustomerByIdButton = new JButton("Search Customer");
+        findCustomerByIdButton.addActionListener(this);
+        customerPanel.add(findCustomerByIdButton);
+
+        updateCustomerButton = new JButton("Update Customer");
+        updateCustomerButton.addActionListener(this);
+        customerPanel.add(updateCustomerButton);
+
+        deleteCustomerButton = new JButton("Delete Customer 💀");
+        deleteCustomerButton.addActionListener(this);
+        customerPanel.add(deleteCustomerButton);
+
+        salirCustomerButton = new JButton("Salir");
+        salirCustomerButton.addActionListener(this);
+        customerPanel.add(salirCustomerButton);
+
         // Inicialmente ocultar los paneles de opciones
         countryPanel.setVisible(false);
         cityPanel.setVisible(false);
         neighborhoodPanel.setVisible(false);
+        idTypePanel.setVisible(false);
+        customerPanel.setVisible(false);
 
 
         // Agregar el panel principal al JFrame
@@ -180,6 +266,8 @@ public class Main extends JFrame implements ActionListener {
             countryPanel.setVisible(true);
             neighborhoodPanel.setVisible(false);
             cityPanel.setVisible(false);
+            idTypePanel.setVisible(false);
+            customerPanel.setVisible(false);
             hideOptionsButton.setVisible(true); // Mostrar botón de ocultar opciones
         } else if (e.getSource() == cityButton) {
             // Mostrar el panel de opciones de ciudad y ocultar el panel de opciones de país
@@ -187,6 +275,8 @@ public class Main extends JFrame implements ActionListener {
             cityPanel.setVisible(true);
             neighborhoodPanel.setVisible(false);
             countryPanel.setVisible(false);
+            idTypePanel.setVisible(false);
+            customerPanel.setVisible(false);
             hideOptionsButton.setVisible(true); // Mostrar botón de ocultar opciones
         } else if (e.getSource() == neighborhoodButton) {
             // Mostrar el panel de opciones de ciudad y ocultar el panel de opciones de país
@@ -194,12 +284,34 @@ public class Main extends JFrame implements ActionListener {
             neighborhoodPanel.setVisible(true);
             countryPanel.setVisible(false);
             cityPanel.setVisible(false);
+            idTypePanel.setVisible(false);
+            customerPanel.setVisible(false);
+            hideOptionsButton.setVisible(true); // Mostrar botón de ocultar opciones
+        } else if (e.getSource() == idTypeButton) {
+            // Mostrar el panel de opciones de ciudad y ocultar el panel de opciones de país
+            mainPanel.add(idTypePanel, BorderLayout.CENTER);
+            idTypePanel.setVisible(true);
+            countryPanel.setVisible(false);
+            cityPanel.setVisible(false);
+            neighborhoodPanel.setVisible(false);
+            customerPanel.setVisible(false);
+            hideOptionsButton.setVisible(true); // Mostrar botón de ocultar opciones
+        } else if (e.getSource() == customerButton) {
+            // Mostrar el panel de opciones de ciudad y ocultar el panel de opciones de país
+            mainPanel.add(customerPanel, BorderLayout.CENTER);
+            customerPanel.setVisible(true);
+            countryPanel.setVisible(false);
+            cityPanel.setVisible(false);
+            neighborhoodPanel.setVisible(false);
+            idTypePanel.setVisible(false);
             hideOptionsButton.setVisible(true); // Mostrar botón de ocultar opciones
         } else if (e.getSource() == hideOptionsButton) {
             // Mostrar los botones principales y ocultar los paneles de opciones
             mainMenuPanel.setVisible(true);
             countryPanel.setVisible(false);
+            cityPanel.setVisible(false);
             neighborhoodPanel.setVisible(false);
+            idTypePanel.setVisible(false);
             hideOptionsButton.setVisible(false); // Ocultar botón de ocultar opciones
         } else if (e.getSource() == createCountryButton) {
             CountryService cs = new CountryRepository();
@@ -305,6 +417,89 @@ public class Main extends JFrame implements ActionListener {
             NeighborhoodUI uiNeighborhood = new NeighborhoodUI(dcuc, fcsuc, fcnuc);
             uiNeighborhood.deleteNeighborhood();
         } else if (e.getSource() == salirNeighborhoodButton) {
+            JOptionPane.showMessageDialog(this, "Saliendo del programa...");
+            System.exit(0); // Salir del programa al presionar Salir
+        }
+
+
+        if (e.getSource() == createIdTypeButton) {
+            IdTypeService cs = new IdTypeRepository();
+            SaveIdTypeUC scuc = new SaveIdTypeUC(cs);
+            IdTypeUI uiIdType = new IdTypeUI(scuc);
+            uiIdType.CreateIdType();
+        } else if (e.getSource() == findAllIdTypesButton) {
+            IdTypeService cs = new IdTypeRepository();
+            FindIdTypesUC fcsuc = new FindIdTypesUC(cs);
+            IdTypeUI uiIdType = new IdTypeUI(fcsuc);
+            uiIdType.ListIdTypes();
+        } else if (e.getSource() == findIdTypeByIdButton) {
+            IdTypeService cs = new IdTypeRepository();
+            FindIdTypeByIdUC fcuc = new FindIdTypeByIdUC(cs);
+            IdTypeUI uiIdType = new IdTypeUI(fcuc);
+            uiIdType.FindIdTypeByID();
+        } else if (e.getSource() == updateIdTypeButton) {
+            IdTypeService cs = new IdTypeRepository();
+            FindIdTypesUC fcsuc = new FindIdTypesUC(cs);
+            FindIdTypeByNameUc fciduc = new FindIdTypeByNameUc(cs);
+            UpdateIdTypeUC ucuc = new UpdateIdTypeUC(cs);
+            IdTypeUI uiIdType = new IdTypeUI(ucuc, fcsuc, fciduc);
+            uiIdType.UpdateIdType();
+        } else if (e.getSource() == deleteIdTypeButton) {
+            IdTypeService cs = new IdTypeRepository();
+            FindIdTypesUC fcsuc = new FindIdTypesUC(cs);
+            FindIdTypeByNameUc fciduc = new FindIdTypeByNameUc(cs);
+            DeleteIdTypeUC dcuc = new DeleteIdTypeUC(cs);
+            IdTypeUI uiIdType = new IdTypeUI(dcuc, fcsuc, fciduc);
+            uiIdType.DeleteIdType();
+        } else if (e.getSource() == salirIdTypeButton) {
+            JOptionPane.showMessageDialog(this, "Saliendo del programa...");
+            System.exit(0); // Salir del programa al presionar Salir
+        }
+
+        if (e.getSource() == createCustomerButton) {
+            NeighborhoodService ns = new NeighborhoodRepository();
+            IdTypeService its = new IdTypeRepository();
+            CustomerService cs = new CustomerRepository();
+            FindNeighborhoodsUC fnuc = new FindNeighborhoodsUC(ns);
+            FindIdTypesUC fcsuc = new FindIdTypesUC(its);
+            FindNeighborhoodByNameUC fnnuc = new FindNeighborhoodByNameUC(ns);
+            FindIdTypeByNameUc fcnuc = new FindIdTypeByNameUc(its);
+            CreateCustomerUC cuc = new CreateCustomerUC(cs);
+            CustomerUI uiCustomer = new CustomerUI(cuc,fnuc,fnnuc,fcsuc,fcnuc);
+            uiCustomer.CreateCustomer();
+        } else if (e.getSource() == findAllCustomersButton) {
+            CustomerService cs = new CustomerRepository();
+            FindCustomersUC fcsuc = new FindCustomersUC(cs);
+            CustomerUI uiCustomer = new CustomerUI(fcsuc);
+            // uiCustomer.ListCustomers();
+        } else if (e.getSource() == findCustomerByIdButton) {
+            CustomerService cs = new CustomerRepository();
+            FindCustomerByIdUC fcuc = new FindCustomerByIdUC(cs);
+            CustomerUI uiCustomer = new CustomerUI(fcuc);
+            // uiCustomer.FindCustomerById();
+        } else if (e.getSource() == updateCustomerButton) {
+            NeighborhoodService ns = new NeighborhoodRepository();
+            IdTypeService its = new IdTypeRepository();
+            CustomerService cs = new CustomerRepository();
+            FindNeighborhoodsUC fnuc = new FindNeighborhoodsUC(ns);
+            FindIdTypesUC fitsuc = new FindIdTypesUC(its);
+            FindNeighborhoodByIdUC fniduc = new FindNeighborhoodByIdUC(ns);
+            FindIdTypeByIdUC fitiduc = new FindIdTypeByIdUC(its);
+            FindNeighborhoodByNameUC fnnuc = new FindNeighborhoodByNameUC(ns);
+            FindIdTypeByNameUc fitnuc = new FindIdTypeByNameUc(its);
+            FindCustomersUC fcsuc = new FindCustomersUC(cs);
+            FindCustomerByNameUC fciduc = new FindCustomerByNameUC(cs);
+            UpdateCustomerUC ucuc = new UpdateCustomerUC(cs);
+            CustomerUI uiCustomer = new CustomerUI(ucuc, fcsuc, fciduc, fnuc, fnnuc, fitsuc, fitnuc, fitiduc, fniduc);
+            uiCustomer.UpdateCustomer();
+        } else if (e.getSource() == deleteCustomerButton) {
+            CustomerService cs = new CustomerRepository();
+            FindCustomersUC fcsuc = new FindCustomersUC(cs);
+            FindCustomerByNameUC fciduc = new FindCustomerByNameUC(cs);
+            DeleteCustomerUC dcuc = new DeleteCustomerUC(cs);
+            // CustomerUI uiCustomer = new CustomerUI(dcuc, fcsuc, fciduc);
+            // uiCustomer.DeleteCustomer();
+        } else if (e.getSource() == salirCustomerButton) {
             JOptionPane.showMessageDialog(this, "Saliendo del programa...");
             System.exit(0); // Salir del programa al presionar Salir
         }
