@@ -145,12 +145,6 @@ public class CustomerUI {
         labelLastName.setHorizontalAlignment(SwingConstants.CENTER);
         txtLastName.setFont(new Font("Calibri", Font.PLAIN, 15));
 
-        JLabel labelAge = new JLabel("Age : ");
-        JTextField txtAge = new JTextField();
-        labelAge.setFont(new Font("Calibri", Font.PLAIN, 15));
-        labelAge.setHorizontalAlignment(SwingConstants.CENTER);
-        txtAge.setFont(new Font("Calibri", Font.PLAIN, 15));
-
         JLabel labelBirthdate = new JLabel("Birthdate : ");
         JDateChooser dateBirthDate = new JDateChooser ();
         labelBirthdate.setFont(new Font("Calibri", Font.PLAIN, 15));
@@ -180,8 +174,6 @@ public class CustomerUI {
         panel.add(txtName);
         panel.add(labelLastName);
         panel.add(txtLastName);
-        panel.add(labelAge);
-        panel.add(txtAge);
         panel.add(labelBirthdate);
         panel.add(dateBirthDate);
         panel.add(labelNeighborhood);
@@ -214,7 +206,6 @@ public class CustomerUI {
                 customer.setName(txtName.getText());
                 customer.setName(txtName.getText());
                 customer.setLastName(txtLastName.getText());
-                customer.setAge(Integer.parseInt(txtAge.getText()));
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 customer.setBirthdate(dateFormat.format(dateBirthDate.getDate()));
                 customer.setIdNeighborhood(neighborhood.get().getId());
@@ -303,15 +294,6 @@ public class CustomerUI {
                 txtLastName.setFont(new Font("Calibri", Font.PLAIN, 15));
                 txtLastName.setText(customer.get().getLastName());
 
-
-                JLabel labelAge = new JLabel("Age : ");
-                JTextField txtAge = new JTextField();
-                labelAge.setFont(new Font("Calibri", Font.PLAIN, 15));
-                labelAge.setHorizontalAlignment(SwingConstants.CENTER);
-                txtAge.setFont(new Font("Calibri", Font.PLAIN, 15));
-                txtAge.setText(Integer.toString(customer.get().getAge()));
-
-
                 JLabel labelBirthdate = new JLabel("Birthdate : ");
                 JDateChooser dateBirthDate = new JDateChooser();
                 labelBirthdate.setFont(new Font("Calibri", Font.PLAIN, 15));
@@ -352,8 +334,6 @@ public class CustomerUI {
                 panel.add(txtName);
                 panel.add(labelLastName);
                 panel.add(txtLastName);
-                panel.add(labelAge);
-                panel.add(txtAge);
                 panel.add(labelBirthdate);
                 panel.add(dateBirthDate);
                 panel.add(labelNeighborhood);
@@ -384,7 +364,6 @@ public class CustomerUI {
                         customer.setName(txtName.getText());
                         customer.setName(txtName.getText());
                         customer.setLastName(txtLastName.getText());
-                        customer.setAge(Integer.parseInt(txtAge.getText()));
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         customer.setBirthdate(dateFormat.format(dateBirthDate.getDate()));
                         customer.setIdNeighborhood(neighborhood.get().getId());

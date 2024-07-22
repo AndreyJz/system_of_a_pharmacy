@@ -31,16 +31,15 @@ public class CustomerRepository implements CustomerService{
 
     @Override
     public void createCustomer(Customer customer) {
-        String query = "INSERT INTO customers (id,doctype,name,lastname,age,birthdate,neighborhood) VALUES (?,?,?,?,?,?,?)";
+        String query = "INSERT INTO customers (id,doctype,name,lastname,birthdate,neighborhood) VALUES (?,?,?,?,?,?)";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, customer.getId());
             ps.setInt(2, customer.getDocType());
             ps.setString(3, customer.getName());
             ps.setString(4, customer.getLastName());
-            ps.setInt(5, customer.getAge());
-            ps.setString(6, customer.getBirthdate());
-            ps.setInt(7, customer.getIdNeighborhood());
+            ps.setString(5, customer.getBirthdate());
+            ps.setInt(6, customer.getIdNeighborhood());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -50,16 +49,15 @@ public class CustomerRepository implements CustomerService{
 
     @Override
     public void updateCustomer(Customer customer) {
-        String query = "UPDATE customers SET doctype = ?,name = ?,lastname = ?,age = ?,birthdate = ?,neighborhood = ? WHERE id = ?";
+        String query = "UPDATE customers SET doctype = ?,name = ?,lastname = ?,birthdate = ?,neighborhood = ? WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, customer.getDocType());
             ps.setString(2, customer.getName());
             ps.setString(3, customer.getLastName());
-            ps.setInt(4, customer.getAge());
-            ps.setString(5, customer.getBirthdate());
-            ps.setInt(6, customer.getIdNeighborhood());
-            ps.setString(7, customer.getId());
+            ps.setString(4, customer.getBirthdate());
+            ps.setInt(5, customer.getIdNeighborhood());
+            ps.setString(6, customer.getId());
             ps.executeUpdate();
         } catch (Exception e) {
             e.addSuppressed(e);

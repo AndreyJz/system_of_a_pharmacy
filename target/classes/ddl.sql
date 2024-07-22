@@ -116,6 +116,29 @@ CREATE TABLE purchases (
 
 DELIMITER //
 
+DROP TRIGGER IF EXISTS calculate_age;
+
+CREATE TRIGGER calculate_age
+BEFORE INSERT ON customers
+FOR EACH ROW
+BEGIN
+    DECLARE agec INT;
+    DECLARE birthdatec DATE;
+
+    SET birthdatec = NEW.birthdate;
+
+    SET agec = TIMESTAMPDIFF(YEAR, birthdatec, CURDATE());
+
+    SET NEW.age = agec;
+END;
+
+//
+
+DELIMITER ;
+
+
+DELIMITER //
+
 DROP TRIGGER IF EXISTS calculate_sale_value;
 
 CREATE TRIGGER calculate_sale_value
