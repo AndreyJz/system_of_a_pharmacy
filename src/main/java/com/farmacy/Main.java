@@ -312,6 +312,7 @@ public class Main extends JFrame implements ActionListener {
             cityPanel.setVisible(false);
             neighborhoodPanel.setVisible(false);
             idTypePanel.setVisible(false);
+            customerPanel.setVisible(false);
             hideOptionsButton.setVisible(false); // Ocultar botón de ocultar opciones
         } else if (e.getSource() == createCountryButton) {
             CountryService cs = new CountryRepository();
@@ -471,12 +472,12 @@ public class Main extends JFrame implements ActionListener {
             CustomerService cs = new CustomerRepository();
             FindCustomersUC fcsuc = new FindCustomersUC(cs);
             CustomerUI uiCustomer = new CustomerUI(fcsuc);
-            // uiCustomer.ListCustomers();
+            uiCustomer.ListCustomers();
         } else if (e.getSource() == findCustomerByIdButton) {
             CustomerService cs = new CustomerRepository();
             FindCustomerByIdUC fcuc = new FindCustomerByIdUC(cs);
             CustomerUI uiCustomer = new CustomerUI(fcuc);
-            // uiCustomer.FindCustomerById();
+            uiCustomer.FindCustomerById();
         } else if (e.getSource() == updateCustomerButton) {
             NeighborhoodService ns = new NeighborhoodRepository();
             IdTypeService its = new IdTypeRepository();
@@ -497,8 +498,8 @@ public class Main extends JFrame implements ActionListener {
             FindCustomersUC fcsuc = new FindCustomersUC(cs);
             FindCustomerByNameUC fciduc = new FindCustomerByNameUC(cs);
             DeleteCustomerUC dcuc = new DeleteCustomerUC(cs);
-            // CustomerUI uiCustomer = new CustomerUI(dcuc, fcsuc, fciduc);
-            // uiCustomer.DeleteCustomer();
+            CustomerUI uiCustomer = new CustomerUI(dcuc, fcsuc, fciduc);
+            uiCustomer.DeleteCustomer();
         } else if (e.getSource() == salirCustomerButton) {
             JOptionPane.showMessageDialog(this, "Saliendo del programa...");
             System.exit(0); // Salir del programa al presionar Salir

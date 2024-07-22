@@ -7,7 +7,9 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +51,7 @@ public class CustomerUI {
     private FindCustomerByNameUC findCustomerByNameUC;
     private FindNeighborhoodByNameUC findNeighborhoodByNameUC;
     private FindIdTypeByNameUc findIdTypeByNameUc;
-    private FindCustomerByIdUC findCustomerById;
+    private FindCustomerByIdUC findCustomerByIdUC;
     private FindIdTypeByIdUC findIdTypeByIdUC;
     private FindNeighborhoodByIdUC findNeighborhoodByIdUC;
     private FindCustomersUC findCustomersUC;
@@ -58,6 +60,7 @@ public class CustomerUI {
     private String nameIdType;
     private String nameNeighborhood;
     private String nameCustomer;
+    private String idCustomer;
     
     
     
@@ -81,12 +84,14 @@ public class CustomerUI {
         this.findIdTypeByNameUc = findIdTypeByNameUC;
     }
 
-    public CustomerUI(DeleteCustomerUC deleteCustomerUC) {
+    public CustomerUI(DeleteCustomerUC deleteCustomerUC, FindCustomersUC fcsuc, FindCustomerByNameUC fciduc) {
         this.deleteCustomerUC = deleteCustomerUC;
+        this.findCustomersUC = fcsuc;
+        this.findCustomerByNameUC = fciduc;
     }
 
     public CustomerUI(FindCustomerByIdUC findCustomerById) {
-        this.findCustomerById = findCustomerById;
+        this.findCustomerByIdUC = findCustomerById;
     }
 
     public CustomerUI(FindCustomerByNameUC findCustomerByNameUC) {
@@ -215,7 +220,7 @@ public class CustomerUI {
                 customer.setIdNeighborhood(neighborhood.get().getId());
                 createCustomerUC.execute(customer);
                 myFrame.dispose();
-                JOptionPane.showMessageDialog(null, "IdType has been added!", null, JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Customer has been added!", null, JOptionPane.PLAIN_MESSAGE);
             }
         });
     }
@@ -308,11 +313,18 @@ public class CustomerUI {
 
 
                 JLabel labelBirthdate = new JLabel("Birthdate : ");
-                JTextField txtBirthdate = new JTextField();
+                JDateChooser dateBirthDate = new JDateChooser();
                 labelBirthdate.setFont(new Font("Calibri", Font.PLAIN, 15));
                 labelBirthdate.setHorizontalAlignment(SwingConstants.CENTER);
-                txtBirthdate.setFont(new Font("Calibri", Font.PLAIN, 15));
-                txtBirthdate.setText(customer.get().getBirthdate());
+                dateBirthDate.setFont(new Font("Calibri", Font.PLAIN, 15));
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    Date birthDate = simpleDateFormat.parse(customer.get().getBirthdate());
+                    dateBirthDate.setDate(birthDate);
+                } catch (ParseException ex) {
+                    ex.printStackTrace();
+                }
 
                 JLabel labelNeighborhood = new JLabel("Neigborhood : ");
                 
@@ -343,7 +355,7 @@ public class CustomerUI {
                 panel.add(labelAge);
                 panel.add(txtAge);
                 panel.add(labelBirthdate);
-                panel.add(txtBirthdate);
+                panel.add(dateBirthDate);
                 panel.add(labelNeighborhood);
                 panel.add(neighborhoodBox);
                 panel.add(new JLabel());  // Placeholder for alignment
@@ -373,94 +385,91 @@ public class CustomerUI {
                         customer.setName(txtName.getText());
                         customer.setLastName(txtLastName.getText());
                         customer.setAge(Integer.parseInt(txtAge.getText()));
-                        customer.setBirthdate(txtBirthdate.getText());
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        customer.setBirthdate(dateFormat.format(dateBirthDate.getDate()));
                         customer.setIdNeighborhood(neighborhood.get().getId());
-                        createCustomerUC.execute(customer);
+                        updateCustomerUC.execute(customer);
                         myFrame.dispose();
-                        JOptionPane.showMessageDialog(null, "IdType has been added!", null, JOptionPane.PLAIN_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Customer has been added!", null, JOptionPane.PLAIN_MESSAGE);
                     }
                 });
             }
         });
-
-        
-
-        
     }
 
-    // public void DeleteIdType(){
-    //     JFrame myFrame = new JFrame();
+    public void DeleteCustomer(){
+        JFrame myFrame = new JFrame();
 
-    //     // Configurar el JFrame
-    //     myFrame.setTitle("Interfaz de Usuario");
-    //     myFrame.setSize(400, 300);
-    //     myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //     myFrame.setLocationRelativeTo(null);
+        // Configurar el JFrame
+        myFrame.setTitle("Interfaz de Usuario");
+        myFrame.setSize(400, 300);
+        myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myFrame.setLocationRelativeTo(null);
 
-    //     JPanel myPanel = new JPanel();
-    //     JButton sendButton = new JButton("Next ->");
+        JPanel myPanel = new JPanel();
+        JButton sendButton = new JButton("Next ->");
 
-    //     List<IdType> idTypes =  findIdTypesUC.execute();
+        List<Customer> customers =  findCustomersUC.execute();
 
-    //     JComboBox<String> myComboBox = new JComboBox<>();
-    //     for (IdType IdType : idTypes) {
-    //         myComboBox.addItem(IdType.getName());
-    //     }
+        JComboBox<String> myComboBox = new JComboBox<>();
+        for (Customer customer : customers) {
+            myComboBox.addItem(customer.getName());
+        }
         
-    //     // IdTypes.forEach(c -> myComboBox.add(c.getName(), myComboBox));
+        // IdTypes.forEach(c -> myComboBox.add(c.getName(), myComboBox));
 
-    //     myPanel.add(myComboBox);
-    //     myPanel.add(sendButton);
-    //     myFrame.add(myPanel);
+        myPanel.add(myComboBox);
+        myPanel.add(sendButton);
+        myFrame.add(myPanel);
 
-    //     sendButton.addActionListener(new ActionListener() {
-    //         @Override
-    //         public void actionPerformed(ActionEvent e) {
-    //             nameIdType = (String) myComboBox.getSelectedItem();
-    //             Optional<IdType> idType = findIdTypeByNameUc.execute(nameIdType);
-    //             deleteIdTypeUC.execute(idType.get().getId());
-    //             myFrame.dispose();
-    //             JOptionPane.showMessageDialog(null, "IdType has been deleted...", null, JOptionPane.PLAIN_MESSAGE);
-    //         }
-    //     });
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                nameCustomer = (String) myComboBox.getSelectedItem();
+                Optional<Customer> customer = findCustomerByNameUC.execute(nameCustomer);
+                deleteCustomerUC.execute(customer.get().getId());
+                myFrame.dispose();
+                JOptionPane.showMessageDialog(null, "Customer has been deleted...", null, JOptionPane.PLAIN_MESSAGE);
+            }
+        });
 
-    //     myFrame.setVisible(true);
-    // }
+        myFrame.setVisible(true);
+    }
 
-    // public Optional<IdType> FindIdTypeByID() {
-    //     idOfIdType = Integer.parseInt(JOptionPane.showInputDialog(null, "Insert the id of the type of id: "));
-    //     Optional<IdType> idType = findIdTypeByIdUC.execute(idOfIdType);
-    //     if (idType.isPresent()) {
-    //         JOptionPane.showMessageDialog(null, "Type of Id founded:\nID: " + idType.get().getId() + "\nNombre: " + idType.get().getName(),
-    //                 "Información del País", JOptionPane.INFORMATION_MESSAGE);
-    //     } else {
-    //         JOptionPane.showMessageDialog(null, "Type of Id not funded", "Error", JOptionPane.ERROR_MESSAGE);
-    //     }
-    //     return idType;
-    // }
+    public Optional<Customer> FindCustomerById() {
+        idCustomer = JOptionPane.showInputDialog(null, "Insert the id of the customer of id: ");
+        Optional<Customer> customer = findCustomerByIdUC.execute(idCustomer);
+        if (customer.isPresent()) {
+            JOptionPane.showMessageDialog(null, "Customer founded:\nID: " + customer.get().getId() + "\nIDType: " + customer.get().getDocType() + "\nNombre: " + customer.get().getName() + "\nLastName: " + customer.get().getLastName() + "\nAge: " + customer.get().getAge() + "\nBirthDate: " + customer.get().getBirthdate() + "\nRegistration Date: " + customer.get().getRegdate() + "\nNeighborhood ID: " + customer.get().getIdNeighborhood(),
+                    "Customer Info", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Customer not funded", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return customer;
+    }
 
-    // public List<IdType> ListIdTypes() {
-    //     List<IdType> idTypes =  findIdTypesUC.execute();
-    //     showIdTypesTable(idTypes);
-    //     return idTypes;
-    // }
+    public List<Customer> ListCustomers() {
+        List<Customer> customers =  findCustomersUC.execute();
+        showCustomersTable(customers);
+        return customers;
+    }
 
-    // public static void showIdTypesTable(List<IdType> idTypes) {
-    //     String[] columns = {"ID", "Type"};
-    //     DefaultTableModel model = new DefaultTableModel(columns, 0);
+    public static void showCustomersTable(List<Customer> customers) {
+        String[] columns = {"ID", "IDType", "Name", "LastName", "Age", "BirthDate", "RestrationDate", "NeighborhoodID"};
+        DefaultTableModel model = new DefaultTableModel(columns, 0);
 
-    //     idTypes.forEach(idType -> {
-    //         Object[] row = {idType.getId(), idType.getName()};
-    //         model.addRow(row);
-    //     });
+        customers.forEach(customer -> {
+            Object[] row = {customer.getId(), customer.getDocType(), customer.getName(), customer.getLastName(), customer.getAge(), customer.getBirthdate(), customer.getRegdate(), customer.getIdNeighborhood()};
+            model.addRow(row);
+        });
 
-    //     JTable table = new JTable(model);
-    //     JScrollPane scrollPane = new JScrollPane(table);
-    //     JPanel panel = new JPanel();
-    //     panel.add(scrollPane);
+        JTable table = new JTable(model);
+        JScrollPane scrollPane = new JScrollPane(table);
+        JPanel panel = new JPanel();
+        panel.add(scrollPane);
 
-    //     JOptionPane.showMessageDialog(null, panel, "Type of ids List", JOptionPane.PLAIN_MESSAGE);
-    // }
+        JOptionPane.showMessageDialog(null, panel, "Customers List", JOptionPane.PLAIN_MESSAGE);
+    }
 
     // private ImageIcon resizeImage(String imagePath, int width, int height) {
     //     // Leer la imagen desde la URL

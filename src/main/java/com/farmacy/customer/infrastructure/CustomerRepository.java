@@ -82,7 +82,7 @@ public class CustomerRepository implements CustomerService{
 
     @Override
     public Optional<Customer> findCustomerById(String id) {
-        String query = "SELECT id,doctype,name,lastname,age,birthdate,registeredate,neighborhood FROM customers WHERE id = ?";
+        String query = "SELECT id,doctype,name,lastname,age,birthdate,registerdate,neighborhood FROM customers WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, id);
