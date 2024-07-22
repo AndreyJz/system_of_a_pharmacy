@@ -248,7 +248,7 @@ public class CustomerUI {
             customersBox.addItem(customer.getName());
         }
         
-        // IdTypes.forEach(c -> myComboBox.addItem(c.getName()));
+        // customers.forEach(c -> customersBox.addItem(c.getName()));
 
         myPanel.add(customersBox);
         myPanel.add(nextButton);

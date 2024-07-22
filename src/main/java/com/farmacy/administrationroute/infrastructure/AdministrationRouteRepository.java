@@ -1,4 +1,4 @@
-package com.farmacy.idtype.infrastructure;
+package com.farmacy.administrationroute.infrastructure;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,16 +10,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import com.farmacy.idtype.domain.entity.IdType;
-import com.farmacy.idtype.domain.service.IdTypeService;
+import com.farmacy.administrationroute.domain.entity.AdministrationRoute;
+import com.farmacy.administrationroute.domain.service.AdministrationRouteService;
 
-public class IdTypeRepository implements IdTypeService {
+public class AdministrationRouteRepository implements AdministrationRouteService {
     private Connection connection;
 
-    public IdTypeRepository(){
+    public AdministrationRouteRepository(){
         try{
             Properties props = new Properties();
             props.load(getClass().getClassLoader().getResourceAsStream("configdb.properties"));
+            // jdbc:mysql://localhost:3306/pharmacy
             String url = props.getProperty("url");
             String user = props.getProperty("user");
             String password = props.getProperty("password");
@@ -30,31 +31,31 @@ public class IdTypeRepository implements IdTypeService {
     }
 
     @Override
-    public void createIdType(IdType idType) {
+    public void createAdministrationRoute(AdministrationRoute administrationRoute) {
         try {
-            String query = "INSERT INTO idtypes (doc) VALUES (?)";
+            String query = "INSERT INTO administrationRoutes (administration_route) VALUES (?)";
             PreparedStatement ps = connection.prepareStatement(query);
 
-            ps.setString(1, idType.getName());
+            ps.setString(1, administrationRoute.getName());
             ps.executeUpdate();
         } catch (Exception e) {
-            System.out.println("hola soy un hp error");
             e.printStackTrace();
+            System.out.println("hola soy un hp error");
         }
     }
 
     @Override
-    public void updateIdType(IdType idType) {
-        String query = "UPDATE idtypes SET doc = ? WHERE id = ?";
+    public void updateAdministrationRoute(AdministrationRoute administrationRoute) {
+        String query = "UPDATE administrationRoutes SET administration_route = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, idType.getName());
-            ps.setInt(2, idType.getId());
+            ps.setString(1, administrationRoute.getName());
+            ps.setInt(2, administrationRoute.getId());
             
             int updatedRows = ps.executeUpdate();
             if (updatedRows > 0) {
-                System.out.println("IdType with ID " + idType.getId() + " updated successfully.");
+                System.out.println("AdministrationRoute with ID " + administrationRoute.getId() + " updated successfully.");
             } else {
-                System.out.println("Failed to update Id Type with ID " + idType.getId() + ".");
+                System.out.println("Failed to update Administration Route with ID " + administrationRoute.getId() + ".");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -62,8 +63,8 @@ public class IdTypeRepository implements IdTypeService {
     }
 
     @Override
-    public IdType deleteIdType(int id) {
-        String query = "DELETE FROM idtypes WHERE id = ?";
+    public AdministrationRoute deleteAdministrationRoute(int id) {
+        String query = "DELETE FROM administrationRoutes WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, id);
@@ -76,15 +77,15 @@ public class IdTypeRepository implements IdTypeService {
     }
 
     @Override
-    public Optional<IdType> findIdTypeById(int id) {
-        String query = "SELECT id, doc FROM idtypes WHERE id = ?";
+    public Optional<AdministrationRoute> findAdministrationRouteById(int id) {
+        String query = "SELECT id, administration_route FROM administrationRoutes WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        IdType idType = new IdType(rs.getInt("id"), rs.getString("doc"));
-                        return Optional.of(idType);
+                        AdministrationRoute administrationRoute = new AdministrationRoute(rs.getInt("id"), rs.getString("administration_route"));
+                        return Optional.of(administrationRoute);
                     }
                 }
         } catch (SQLException e) {
@@ -96,36 +97,36 @@ public class IdTypeRepository implements IdTypeService {
 
 
     @Override
-    public List<IdType> findAllIdType() {
-        String query = "SELECT id,doc FROM idtypes";
-        List<IdType> idtypes = new ArrayList<>();
+    public List<AdministrationRoute> findAllAdministrationRoute() {
+        String query = "SELECT id,administration_route FROM administrationRoutes";
+        List<AdministrationRoute> AdministrationRoutes = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    IdType idType = new IdType();
-                    idType.setId(rs.getInt("id"));
-                    idType.setName(rs.getString("doc"));
-                    idtypes.add(idType);
+                    AdministrationRoute administrationRoute = new AdministrationRoute();
+                    administrationRoute.setId(rs.getInt("id"));
+                    administrationRoute.setName(rs.getString("administration_route"));
+                    AdministrationRoutes.add(administrationRoute);
                 }
             }
         } catch (Exception e) {
             e.addSuppressed(e);
             System.out.println("hola soy un hp error");
         }
-        return idtypes;
+        return AdministrationRoutes;
     }
 
     @Override
-    public Optional<IdType> findIdTypeByName(String name) {
-        String query = "SELECT id, doc FROM idtypes WHERE doc = ?";
+    public Optional<AdministrationRoute> findAdministrationRouteByName(String name) {
+        String query = "SELECT id, administration_route FROM administrationRoutes WHERE administration_route = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    IdType idType = new IdType(rs.getInt("id"), rs.getString("doc"));
-                    return Optional.of(idType);
+                    AdministrationRoute administrationRoute = new AdministrationRoute(rs.getInt("id"), rs.getString("administration_route"));
+                    return Optional.of(administrationRoute);
                 }
             }
         } catch (Exception e) {

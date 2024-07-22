@@ -39,6 +39,7 @@ public class CityRepository implements CityService {
             ps.setInt(2, city.getIdCountry());
             ps.executeUpdate();
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("hola soy un hp error");
         }
     }
@@ -104,11 +105,12 @@ public class CityRepository implements CityService {
                     City city = new City();
                     city.setId(rs.getInt("id"));
                     city.setName(rs.getString("city"));
-                    city.setIdCountry(rs.getInt("countr y"));
+                    city.setIdCountry(rs.getInt("country"));
                     cities.add(city);
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("soy un hp error");
         }
         return cities;

@@ -110,7 +110,7 @@ public class CityUI {
                 city.setIdCountry(country.get().getId());
                 createCityUC.execute(city);
                 myFrame.dispose();
-                JOptionPane.showMessageDialog(null, "Country has been added!", null, JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, "City has been added!", null, JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -162,7 +162,7 @@ public class CityUI {
                 city.get().setName(newName);
                 updateCityUC.execute(city.get());
                 myFrame.dispose();
-                JOptionPane.showMessageDialog(null, "Country has been updated!", null, JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, "City has been updated!", null, JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -201,7 +201,7 @@ public class CityUI {
                 Optional<City> city = findCityByNameUC.execute(nameCity);
                 deleteCityUC.execute(city.get().getId());
                 myFrame.dispose();
-                JOptionPane.showMessageDialog(null, "Country has been deleted...", null, JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, "City has been deleted...", null, JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -209,13 +209,13 @@ public class CityUI {
     }
 
     public Optional<City> FindCityByID() {
-        idCity = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el ID de la Ciudad: "));
+        idCity = Integer.parseInt(JOptionPane.showInputDialog(null, "Insert the ID of the City: "));
         Optional<City> city = findCityByIdUC.execute(idCity);
         if (city.isPresent()) {
-            JOptionPane.showMessageDialog(null, "Ciudad encontrada:\nID: " + city.get().getId() + "\nName: " + city.get().getName() + "\nIdCountry: " + city.get().getIdCountry(),
-                    "Información de la Ciudad", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "City Founded:\nID: " + city.get().getId() + "\nName: " + city.get().getName() + "\nIdCountry: " + city.get().getIdCountry(),
+                    "City's Info", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, "Ciudad no encontrada", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "City Not Funded", "Error", JOptionPane.ERROR_MESSAGE);
         }
         return city;
     }
