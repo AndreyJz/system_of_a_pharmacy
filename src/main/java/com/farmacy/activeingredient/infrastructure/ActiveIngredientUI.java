@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.farmacy.activeingredient.aplication.DeleteActiveIngredientUC;
 import com.farmacy.activeingredient.aplication.FindActiveIngredientByIdUC;
-import com.farmacy.activeingredient.aplication.FindActiveIngredientByNameUc;
+import com.farmacy.activeingredient.aplication.FindActiveIngredientByNameUC;
 import com.farmacy.activeingredient.aplication.FindActiveIngredientsUC;
 import com.farmacy.activeingredient.aplication.CreateActiveIngredientUC;
 import com.farmacy.activeingredient.aplication.UpdateActiveIngredientUC;
@@ -38,7 +38,7 @@ public class ActiveIngredientUI {
     private FindActiveIngredientByIdUC findActiveIngredientByIdUC;
     private FindActiveIngredientsUC findActiveIngredientsUC;
     private DeleteActiveIngredientUC deleteActiveIngredientUC;
-    private FindActiveIngredientByNameUc findActiveIngredientByNameUc;
+    private FindActiveIngredientByNameUC findActiveIngredientByNameUc;
     private int idOfActiveIngredient;
     private String nameActiveIngredient;
 
@@ -58,7 +58,7 @@ public class ActiveIngredientUI {
         this.updateActiveIngredientUC = updateActiveIngredientUC;
     }
 
-    public ActiveIngredientUI(UpdateActiveIngredientUC ucuc, FindActiveIngredientsUC fcsuc, FindActiveIngredientByNameUc fciduc) {
+    public ActiveIngredientUI(UpdateActiveIngredientUC ucuc, FindActiveIngredientsUC fcsuc, FindActiveIngredientByNameUC fciduc) {
         this.updateActiveIngredientUC = ucuc;
         this.findActiveIngredientsUC = fcsuc;
         this.findActiveIngredientByNameUc = fciduc;
@@ -68,13 +68,13 @@ public class ActiveIngredientUI {
         this.deleteActiveIngredientUC = deleteActiveIngredientUC;
     }
 
-    public ActiveIngredientUI(DeleteActiveIngredientUC dcuc, FindActiveIngredientsUC fcsuc, FindActiveIngredientByNameUc fciduc) {
+    public ActiveIngredientUI(DeleteActiveIngredientUC dcuc, FindActiveIngredientsUC fcsuc, FindActiveIngredientByNameUC fciduc) {
         this.deleteActiveIngredientUC = dcuc;
         this.findActiveIngredientsUC = fcsuc;
         this.findActiveIngredientByNameUc = fciduc;
     }
 
-    public ActiveIngredientUI(FindActiveIngredientByNameUc findActiveIngredientByNameUc) {
+    public ActiveIngredientUI(FindActiveIngredientByNameUC findActiveIngredientByNameUc) {
         this.findActiveIngredientByNameUc = findActiveIngredientByNameUc;
     }
 
@@ -95,11 +95,11 @@ public class ActiveIngredientUI {
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ActiveIngredient ActiveIngredient = new ActiveIngredient();
-                ActiveIngredient.setName(textField.getText());
-                createActiveIngredientUC.execute(ActiveIngredient);
+                ActiveIngredient activeIngredient = new ActiveIngredient();
+                activeIngredient.setName(textField.getText());
+                createActiveIngredientUC.execute(activeIngredient);
                 myFrame.dispose();
-                JOptionPane.showMessageDialog(null, "Administration Route has been added!", null, JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Active Ingredient has been added!", null, JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -124,11 +124,11 @@ public class ActiveIngredientUI {
         JPanel myPanel = new JPanel();
         JButton sendButton = new JButton("Next ->");
 
-        List<ActiveIngredient> ActiveIngredients =  findActiveIngredientsUC.execute();
+        List<ActiveIngredient> activeIngredients =  findActiveIngredientsUC.execute();
 
         JComboBox<String> myComboBox = new JComboBox<>();
-        for (ActiveIngredient ActiveIngredient : ActiveIngredients) {
-            myComboBox.addItem(ActiveIngredient.getName());
+        for (ActiveIngredient activeIngredient : activeIngredients) {
+            myComboBox.addItem(activeIngredient.getName());
         }
         
         // ActiveIngredients.forEach(c -> myComboBox.addItem(c.getName()));
@@ -141,12 +141,12 @@ public class ActiveIngredientUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 nameActiveIngredient = (String) myComboBox.getSelectedItem();
-                Optional<ActiveIngredient> ActiveIngredient = findActiveIngredientByNameUc.execute(nameActiveIngredient);
-                String newName = JOptionPane.showInputDialog(null, "Insert the new name for the Administration Route");
-                ActiveIngredient.get().setName(newName);
-                updateActiveIngredientUC.execute(ActiveIngredient.get());
+                Optional<ActiveIngredient> activeIngredient = findActiveIngredientByNameUc.execute(nameActiveIngredient);
+                String newName = JOptionPane.showInputDialog(null, "Insert the new name for the Active Ingredient");
+                activeIngredient.get().setName(newName);
+                updateActiveIngredientUC.execute(activeIngredient.get());
                 myFrame.dispose();
-                JOptionPane.showMessageDialog(null, "Administration Route has been updated!", null, JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Active Ingredient has been updated!", null, JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -164,11 +164,11 @@ public class ActiveIngredientUI {
         JPanel myPanel = new JPanel();
         JButton sendButton = new JButton("Next ->");
 
-        List<ActiveIngredient> ActiveIngredients =  findActiveIngredientsUC.execute();
+        List<ActiveIngredient> activeIngredients =  findActiveIngredientsUC.execute();
 
         JComboBox<String> myComboBox = new JComboBox<>();
-        for (ActiveIngredient ActiveIngredient : ActiveIngredients) {
-            myComboBox.addItem(ActiveIngredient.getName());
+        for (ActiveIngredient activeIngredient : activeIngredients) {
+            myComboBox.addItem(activeIngredient.getName());
         }
         
         // ActiveIngredients.forEach(c -> myComboBox.add(c.getName(), myComboBox));
@@ -181,10 +181,10 @@ public class ActiveIngredientUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 nameActiveIngredient = (String) myComboBox.getSelectedItem();
-                Optional<ActiveIngredient> ActiveIngredient = findActiveIngredientByNameUc.execute(nameActiveIngredient);
-                deleteActiveIngredientUC.execute(ActiveIngredient.get().getId());
+                Optional<ActiveIngredient> activeIngredient = findActiveIngredientByNameUc.execute(nameActiveIngredient);
+                deleteActiveIngredientUC.execute(activeIngredient.get().getId());
                 myFrame.dispose();
-                JOptionPane.showMessageDialog(null, "Administration Route has been deleted...", null, JOptionPane.PLAIN_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Active Ingredient has been deleted...", null, JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -192,29 +192,29 @@ public class ActiveIngredientUI {
     }
 
     public Optional<ActiveIngredient> FindActiveIngredientByID() {
-        idOfActiveIngredient = Integer.parseInt(JOptionPane.showInputDialog(null, "Insert the id of the Administration Route: "));
-        Optional<ActiveIngredient> ActiveIngredient = findActiveIngredientByIdUC.execute(idOfActiveIngredient);
-        if (ActiveIngredient.isPresent()) {
-            JOptionPane.showMessageDialog(null, "Administration Route founded:\nID: " + ActiveIngredient.get().getId() + "\nNombre: " + ActiveIngredient.get().getName(),
+        idOfActiveIngredient = Integer.parseInt(JOptionPane.showInputDialog(null, "Insert the id of the Active Ingredient: "));
+        Optional<ActiveIngredient> activeIngredient = findActiveIngredientByIdUC.execute(idOfActiveIngredient);
+        if (activeIngredient.isPresent()) {
+            JOptionPane.showMessageDialog(null, "Active Ingredient founded:\nID: " + activeIngredient.get().getId() + "\nNombre: " + activeIngredient.get().getName(),
                     "Administration Route's Info", JOptionPane.INFORMATION_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, "Administration Route not funded", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Active Ingredient not funded", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        return ActiveIngredient;
+        return activeIngredient;
     }
 
     public List<ActiveIngredient> ListActiveIngredients() {
-        List<ActiveIngredient> ActiveIngredients =  findActiveIngredientsUC.execute();
-        showActiveIngredientsTable(ActiveIngredients);
-        return ActiveIngredients;
+        List<ActiveIngredient> activeIngredients =  findActiveIngredientsUC.execute();
+        showActiveIngredientsTable(activeIngredients);
+        return activeIngredients;
     }
 
-    public static void showActiveIngredientsTable(List<ActiveIngredient> ActiveIngredients) {
-        String[] columns = {"ID", "Administration Route"};
+    public static void showActiveIngredientsTable(List<ActiveIngredient> activeIngredients) {
+        String[] columns = {"ID", "Active Ingredient"};
         DefaultTableModel model = new DefaultTableModel(columns, 0);
 
-        ActiveIngredients.forEach(ActiveIngredient -> {
-            Object[] row = {ActiveIngredient.getId(), ActiveIngredient.getName()};
+        activeIngredients.forEach(activeIngredient -> {
+            Object[] row = {activeIngredient.getId(), activeIngredient.getName()};
             model.addRow(row);
         });
 

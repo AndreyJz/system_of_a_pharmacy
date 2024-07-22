@@ -1,18 +1,18 @@
 package com.farmacy.activeingredient.aplication;
 
+import java.util.List;
 
 import com.farmacy.activeingredient.domain.entity.ActiveIngredient;
 import com.farmacy.activeingredient.domain.service.ActiveIngredientService;
 
-public class CreateActiveIngredientUC {
+public class FindActiveIngredientsUC {
     private final ActiveIngredientService activeIngredientService;
 
-    public CreateActiveIngredientUC(ActiveIngredientService activeIngredientService) {
+    public FindActiveIngredientsUC(ActiveIngredientService activeIngredientService) {
         this.activeIngredientService = activeIngredientService;
     }
-    
-    public void execute(ActiveIngredient activeIngredient) {
-        activeIngredientService.createActiveIngredient(activeIngredient);
+
+    public List<ActiveIngredient> execute(){
+        return activeIngredientService.findAllActiveIngredient();
     }
-    
 }
