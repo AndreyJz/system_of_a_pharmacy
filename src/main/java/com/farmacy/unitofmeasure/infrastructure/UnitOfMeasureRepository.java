@@ -1,4 +1,4 @@
-package com.farmacy.activeingredient.infrastructure;
+package com.farmacy.unitofmeasure.infrastructure;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 
-import com.farmacy.activeingredient.domain.entity.ActiveIngredient;
-import com.farmacy.activeingredient.domain.service.ActiveIngredientService;
+import com.farmacy.unitofmeasure.domain.entity.UnitOfMeasure;
+import com.farmacy.unitofmeasure.domain.service.UnitOfMeasureService;
 
-public class ActiveIngredientRepository implements ActiveIngredientService {
+public class UnitOfMeasureRepository implements UnitOfMeasureService {
     private Connection connection;
 
-    public ActiveIngredientRepository(){
+    public UnitOfMeasureRepository(){
         try{
             Properties props = new Properties();
             props.load(getClass().getClassLoader().getResourceAsStream("configdb.properties"));
@@ -31,12 +31,12 @@ public class ActiveIngredientRepository implements ActiveIngredientService {
     }
 
     @Override
-    public void createActiveIngredient(ActiveIngredient activeIngredient) {
+    public void createUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
         try {
-            String query = "INSERT INTO activeIngredients (active_ingredient) VALUES (?)";
+            String query = "INSERT INTO unitsOfMeasure (unit_of_measure) VALUES (?)";
             PreparedStatement ps = connection.prepareStatement(query);
 
-            ps.setString(1, activeIngredient.getName());
+            ps.setString(1, unitOfMeasure.getName());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,17 +45,17 @@ public class ActiveIngredientRepository implements ActiveIngredientService {
     }
 
     @Override
-    public void updateActiveIngredient(ActiveIngredient activeIngredient) {
-        String query = "UPDATE activeIngredients SET active_ingredient = ? WHERE id = ?";
+    public void updateUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
+        String query = "UPDATE unitsOfMeasure SET unit_of_measure = ? WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setString(1, activeIngredient.getName());
-            ps.setInt(2, activeIngredient.getId());
+            ps.setString(1, unitOfMeasure.getName());
+            ps.setInt(2, unitOfMeasure.getId());
             
             int updatedRows = ps.executeUpdate();
             if (updatedRows > 0) {
-                System.out.println("Active Ingredient with ID " + activeIngredient.getId() + " updated successfully.");
+                System.out.println("Unit Of Measure with ID " + unitOfMeasure.getId() + " updated successfully.");
             } else {
-                System.out.println("Failed to update Active Ingredient with ID " + activeIngredient.getId() + ".");
+                System.out.println("Failed to update Unit Of Measure with ID " + unitOfMeasure.getId() + ".");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -63,8 +63,8 @@ public class ActiveIngredientRepository implements ActiveIngredientService {
     }
 
     @Override
-    public ActiveIngredient deleteActiveIngredient(int id) {
-        String query = "DELETE FROM activeIngredients WHERE id = ?";
+    public UnitOfMeasure deleteUnitOfMeasure(int id) {
+        String query = "DELETE FROM unitsOfMeasure WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, id);
@@ -77,15 +77,15 @@ public class ActiveIngredientRepository implements ActiveIngredientService {
     }
 
     @Override
-    public Optional<ActiveIngredient> findActiveIngredientById(int id) {
-        String query = "SELECT id, active_ingredient FROM activeIngredients WHERE id = ?";
+    public Optional<UnitOfMeasure> findUnitOfMeasureById(int id) {
+        String query = "SELECT id, unit_of_measure FROM unitsOfMeasure WHERE id = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        ActiveIngredient activeIngredient = new ActiveIngredient(rs.getInt("id"), rs.getString("active_ingredient"));
-                        return Optional.of(activeIngredient);
+                        UnitOfMeasure unitOfMeasure = new UnitOfMeasure(rs.getInt("id"), rs.getString("unit_of_measure"));
+                        return Optional.of(unitOfMeasure);
                     }
                 }
         } catch (SQLException e) {
@@ -97,36 +97,36 @@ public class ActiveIngredientRepository implements ActiveIngredientService {
 
 
     @Override
-    public List<ActiveIngredient> findAllActiveIngredient() {
-        String query = "SELECT id, active_ingredient FROM activeIngredients";
-        List<ActiveIngredient> activeIngredients = new ArrayList<>();
+    public List<UnitOfMeasure> findAllUnitOfMeasure() {
+        String query = "SELECT id, unit_of_measure FROM unitsOfMeasure";
+        List<UnitOfMeasure> unitOfMeasures = new ArrayList<>();
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    ActiveIngredient activeIngredient = new ActiveIngredient();
-                    activeIngredient.setId(rs.getInt("id"));
-                    activeIngredient.setName(rs.getString("active_ingredient"));
-                    activeIngredients.add(activeIngredient);
+                    UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
+                    unitOfMeasure.setId(rs.getInt("id"));
+                    unitOfMeasure.setName(rs.getString("unit_of_measure"));
+                    unitOfMeasures.add(unitOfMeasure);
                 }
             }
         } catch (Exception e) {
             e.addSuppressed(e);
             System.out.println("hola soy un hp error");
         }
-        return activeIngredients;
+        return unitOfMeasures;
     }
 
     @Override
-    public Optional<ActiveIngredient> findActiveIngredientByName(String name) {
-        String query = "SELECT id, active_ingredient FROM activeIngredients WHERE active_ingredient = ?";
+    public Optional<UnitOfMeasure> findUnitOfMeasureByName(String name) {
+        String query = "SELECT id, unit_of_measure FROM unitsOfMeasure WHERE unit_of_measure = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, name);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    ActiveIngredient activeIngredient = new ActiveIngredient(rs.getInt("id"), rs.getString("active_ingredient"));
-                    return Optional.of(activeIngredient);
+                    UnitOfMeasure unitOfMeasure = new UnitOfMeasure(rs.getInt("id"), rs.getString("unit_of_measure"));
+                    return Optional.of(unitOfMeasure);
                 }
             }
         } catch (Exception e) {

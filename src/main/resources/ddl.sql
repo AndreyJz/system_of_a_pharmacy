@@ -47,7 +47,7 @@ CREATE TABLE customers (
 
 CREATE TABLE administrationRoutes (
     id INT AUTO_INCREMENT,
-    administration_route VARCHAR(50),
+    x VARCHAR(50),
     CONSTRAINT pk_administration_routes_id PRIMARY KEY (id)
 );
 

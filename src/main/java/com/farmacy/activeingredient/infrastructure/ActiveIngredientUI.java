@@ -88,7 +88,7 @@ public class ActiveIngredientUI {
 
         JLabel imageLabel = new JLabel();
         JTextField textField = new JTextField(20);
-        JButton sendButton = new JButton("Enviar");
+        JButton sendButton = new JButton("Sent");
 
         imageLabel.setIcon(resizeImage("/images/45069.png", 100, 100));
 
@@ -223,7 +223,7 @@ public class ActiveIngredientUI {
         JPanel panel = new JPanel();
         panel.add(scrollPane);
 
-        JOptionPane.showMessageDialog(null, panel, "Administration Routes List", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(null, panel, "Active Ingredients List", JOptionPane.PLAIN_MESSAGE);
     }
 
     private ImageIcon resizeImage(String imagePath, int width, int height) {

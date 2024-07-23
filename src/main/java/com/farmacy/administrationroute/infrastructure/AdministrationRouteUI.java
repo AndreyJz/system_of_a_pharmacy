@@ -88,7 +88,7 @@ public class AdministrationRouteUI {
 
         JLabel imageLabel = new JLabel();
         JTextField textField = new JTextField(20);
-        JButton sendButton = new JButton("Enviar");
+        JButton sendButton = new JButton("Sent");
 
         imageLabel.setIcon(resizeImage("/images/45069.png", 100, 100));
 

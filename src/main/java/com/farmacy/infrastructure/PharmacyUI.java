@@ -8,6 +8,24 @@ import com.farmacy.country.aplication.FindCountryByNameUc;
 import com.farmacy.country.aplication.SaveCountryUC;
 import com.farmacy.country.aplication.UpdateCountryUC;
 import com.farmacy.country.domain.service.CountryService;
+import com.farmacy.activeingredient.aplication.CreateActiveIngredientUC;
+import com.farmacy.activeingredient.aplication.DeleteActiveIngredientUC;
+import com.farmacy.activeingredient.aplication.FindActiveIngredientByIdUC;
+import com.farmacy.activeingredient.aplication.FindActiveIngredientByNameUC;
+import com.farmacy.activeingredient.aplication.FindActiveIngredientsUC;
+import com.farmacy.activeingredient.aplication.UpdateActiveIngredientUC;
+import com.farmacy.activeingredient.domain.service.ActiveIngredientService;
+import com.farmacy.activeingredient.infrastructure.ActiveIngredientRepository;
+import com.farmacy.activeingredient.infrastructure.ActiveIngredientUI;
+import com.farmacy.administrationroute.aplication.CreateAdministrationRouteUC;
+import com.farmacy.administrationroute.aplication.DeleteAdministrationRouteUC;
+import com.farmacy.administrationroute.aplication.FindAdministrationRouteByIdUC;
+import com.farmacy.administrationroute.aplication.FindAdministrationRouteByNameUc;
+import com.farmacy.administrationroute.aplication.FindAdministrationRoutesUC;
+import com.farmacy.administrationroute.aplication.UpdateAdministrationRouteUC;
+import com.farmacy.administrationroute.domain.service.AdministrationRouteService;
+import com.farmacy.administrationroute.infrastructure.AdministrationRouteRepository;
+import com.farmacy.administrationroute.infrastructure.AdministrationRouteUI;
 import com.farmacy.city.aplication.CreateCityUC;
 import com.farmacy.city.aplication.DeleteCityUC;
 import com.farmacy.city.aplication.FindCitiesUC;
@@ -23,6 +41,15 @@ import com.farmacy.neighborhood.aplication.UpdateNeighborhoodUC;
 import com.farmacy.neighborhood.domain.service.NeighborhoodService;
 import com.farmacy.neighborhood.infrastructure.NeighborhoodRepository;
 import com.farmacy.neighborhood.infrastructure.NeighborhoodUI;
+import com.farmacy.unitofmeasure.aplication.CreateUnitOfMeasureUC;
+import com.farmacy.unitofmeasure.aplication.DeleteUnitOfMeasureUC;
+import com.farmacy.unitofmeasure.aplication.FindUnitOfMeasureByIdUC;
+import com.farmacy.unitofmeasure.aplication.FindUnitOfMeasureByNameUC;
+import com.farmacy.unitofmeasure.aplication.FindUnitOfMeasuresUC;
+import com.farmacy.unitofmeasure.aplication.UpdateUnitOfMeasureUC;
+import com.farmacy.unitofmeasure.domain.service.UnitOfMeasureService;
+import com.farmacy.unitofmeasure.infrastructure.UnitOfMeasureRepository;
+import com.farmacy.unitofmeasure.infrastructure.UnitOfMeasureUI;
 import com.farmacy.city.domain.service.CityService;
 import com.farmacy.city.infrastructure.CityRepository;
 import com.farmacy.city.infrastructure.CityUI;
@@ -74,7 +101,7 @@ public class PharmacyUI extends JFrame implements ActionListener {
 
     private void initializeUI() {
         setTitle("Pharmacy Menu");
-        setSize(600, 400);  // Aumentado el tamaño para mejor visibilidad
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -83,7 +110,7 @@ public class PharmacyUI extends JFrame implements ActionListener {
 
         setLayout(new BorderLayout());
 
-        mainMenuPanel = new JPanel(new FlowLayout());
+        mainMenuPanel = new JPanel(new GridLayout(0,4,10,10));
         initializeMainPanel();
         add(mainMenuPanel, BorderLayout.NORTH);
 
@@ -96,14 +123,14 @@ public class PharmacyUI extends JFrame implements ActionListener {
     }
 
     private void initializeMainPanel() {
-        String[] mainOptions = {"Country", "City", "Neighborhood", "IdType", "Customer"};
+        String[] mainOptions = {"Country", "City", "Neighborhood", "IdType", "Customer", "AdministrationRoute", "ActiveIngredient", "UnitOfMeasure"};
         for (String option : mainOptions) {
             addButton(mainMenuPanel, option, this);
         }
     }
 
     private void initializeSubPanels() {
-        String[] entities = {"Country", "City", "Neighborhood", "IdType", "Customer"};
+        String[] entities = {"Country", "City", "Neighborhood", "IdType", "Customer", "AdministrationRoute", "ActiveIngredient", "UnitOfMeasure"};
         for (String entity : entities) {
             JPanel panel = new JPanel(new GridLayout(6, 1, 10, 10));
             addEntityButtons(panel, entity);
@@ -194,10 +221,21 @@ public class PharmacyUI extends JFrame implements ActionListener {
             CreateCustomerUC cuc = new CreateCustomerUC(cs);
             CustomerUI uiCustomer = new CustomerUI(cuc,fnuc,fnnuc,fcsuc,fcnuc);
             uiCustomer.CreateCustomer();
-        } else if (entity.equals("")) {
-
-        } else if (entity.equals("")) {
-
+        } else if (entity.equals("AdministrationRoute")) {
+            AdministrationRouteService cs = new AdministrationRouteRepository();
+            CreateAdministrationRouteUC scuc = new CreateAdministrationRouteUC(cs);
+            AdministrationRouteUI uiAdministrationRoute = new AdministrationRouteUI(scuc);
+            uiAdministrationRoute.CreateAdministrationRoute();
+        } else if (entity.equals("ActiveIngredient")) {
+            ActiveIngredientService cs = new ActiveIngredientRepository();
+            CreateActiveIngredientUC scuc = new CreateActiveIngredientUC(cs);
+            ActiveIngredientUI uiActiveIngredient = new ActiveIngredientUI(scuc);
+            uiActiveIngredient.CreateActiveIngredient();
+        } else if (entity.equals("UnitOfMeasure")) {
+            UnitOfMeasureService cs = new UnitOfMeasureRepository();
+            CreateUnitOfMeasureUC scuc = new CreateUnitOfMeasureUC(cs);
+            UnitOfMeasureUI uiUnitOfMeasure = new UnitOfMeasureUI(scuc);
+            uiUnitOfMeasure.CreateUnitOfMeasure();
         }
     }
 
@@ -227,10 +265,21 @@ public class PharmacyUI extends JFrame implements ActionListener {
             FindCustomersUC fcsuc = new FindCustomersUC(cs);
             CustomerUI uiCustomer = new CustomerUI(fcsuc);
             uiCustomer.ListCustomers();
-        } else if (entity.equals("")) {
-
-        } else if (entity.equals("")) {
-
+        } else if (entity.equals("AdministrationRoute")) {
+            AdministrationRouteService cs = new AdministrationRouteRepository();
+            FindAdministrationRoutesUC fcsuc = new FindAdministrationRoutesUC(cs);
+            AdministrationRouteUI uiAdministrationRoute = new AdministrationRouteUI(fcsuc);
+            uiAdministrationRoute.ListAdministrationRoutes();
+        } else if (entity.equals("ActiveIngredient")) {
+            ActiveIngredientService cs = new ActiveIngredientRepository();
+            FindActiveIngredientsUC fcsuc = new FindActiveIngredientsUC(cs);
+            ActiveIngredientUI uiActiveIngredient = new ActiveIngredientUI(fcsuc);
+            uiActiveIngredient.ListActiveIngredients();
+        } else if (entity.equals("UnitOfMeasure")) {
+            UnitOfMeasureService cs = new UnitOfMeasureRepository();
+            FindUnitOfMeasuresUC fcsuc = new FindUnitOfMeasuresUC(cs);
+            UnitOfMeasureUI uiUnitOfMeasure = new UnitOfMeasureUI(fcsuc);
+            uiUnitOfMeasure.ListUnitOfMeasures();
         }
     }
 
@@ -260,10 +309,21 @@ public class PharmacyUI extends JFrame implements ActionListener {
             FindCustomerByIdUC fcuc = new FindCustomerByIdUC(cs);
             CustomerUI uiCustomer = new CustomerUI(fcuc);
             uiCustomer.FindCustomerById();
-        } else if (entity.equals("")) {
-
-        } else if (entity.equals("")) {
-
+        } else if (entity.equals("AdministrationRoute")) {
+            AdministrationRouteService cs = new AdministrationRouteRepository();
+            FindAdministrationRouteByIdUC fcuc = new FindAdministrationRouteByIdUC(cs);
+            AdministrationRouteUI uiAdministrationRoute = new AdministrationRouteUI(fcuc);
+            uiAdministrationRoute.FindAdministrationRouteByID();
+        } else if (entity.equals("ActiveIngredient")) {
+            ActiveIngredientService cs = new ActiveIngredientRepository();
+            FindActiveIngredientByIdUC fcuc = new FindActiveIngredientByIdUC(cs);
+            ActiveIngredientUI uiActiveIngredient = new ActiveIngredientUI(fcuc);
+            uiActiveIngredient.FindActiveIngredientByID();
+        } else if (entity.equals("UnitOfMeasure")) {
+            UnitOfMeasureService cs = new UnitOfMeasureRepository();
+            FindUnitOfMeasureByIdUC fcuc = new FindUnitOfMeasureByIdUC(cs);
+            UnitOfMeasureUI uiUnitOfMeasure = new UnitOfMeasureUI(fcuc);
+            uiUnitOfMeasure.FindUnitOfMeasureByID();
         }
     }
 
@@ -311,10 +371,27 @@ public class PharmacyUI extends JFrame implements ActionListener {
             UpdateCustomerUC ucuc = new UpdateCustomerUC(cs);
             CustomerUI uiCustomer = new CustomerUI(ucuc, fcsuc, fciduc, fnuc, fnnuc, fitsuc, fitnuc, fitiduc, fniduc);
             uiCustomer.UpdateCustomer();
-        } else if (entity.equals("")) {
-
-        } else if (entity.equals("")) {
-
+        } else if (entity.equals("AdministrationRoute")) {
+            AdministrationRouteService cs = new AdministrationRouteRepository();
+            FindAdministrationRoutesUC fcsuc = new FindAdministrationRoutesUC(cs);
+            FindAdministrationRouteByNameUc fciduc = new FindAdministrationRouteByNameUc(cs);
+            UpdateAdministrationRouteUC ucuc = new UpdateAdministrationRouteUC(cs);
+            AdministrationRouteUI uiAdministrationRoute = new AdministrationRouteUI(ucuc, fcsuc, fciduc);
+            uiAdministrationRoute.UpdateAdministrationRoute();
+        } else if (entity.equals("ActiveIngredient")) {
+            ActiveIngredientService cs = new ActiveIngredientRepository();
+            FindActiveIngredientsUC fcsuc = new FindActiveIngredientsUC(cs);
+            FindActiveIngredientByNameUC fciduc = new FindActiveIngredientByNameUC(cs);
+            UpdateActiveIngredientUC ucuc = new UpdateActiveIngredientUC(cs);
+            ActiveIngredientUI uiActiveIngredient = new ActiveIngredientUI(ucuc, fcsuc, fciduc);
+            uiActiveIngredient.UpdateActiveIngredient();
+        } else if (entity.equals("UnitOfMeasure")) {
+            UnitOfMeasureService cs = new UnitOfMeasureRepository();
+            FindUnitOfMeasuresUC fcsuc = new FindUnitOfMeasuresUC(cs);
+            FindUnitOfMeasureByNameUC fciduc = new FindUnitOfMeasureByNameUC(cs);
+            UpdateUnitOfMeasureUC ucuc = new UpdateUnitOfMeasureUC(cs);
+            UnitOfMeasureUI uiUnitOfMeasure = new UnitOfMeasureUI(ucuc, fcsuc, fciduc);
+            uiUnitOfMeasure.UpdateUnitOfMeasure();
         }
     }
 
@@ -354,17 +431,28 @@ public class PharmacyUI extends JFrame implements ActionListener {
             DeleteCustomerUC dcuc = new DeleteCustomerUC(cs);
             CustomerUI uiCustomer = new CustomerUI(dcuc, fcsuc, fciduc);
             uiCustomer.DeleteCustomer();
-        } else if (entity.equals("")) {
-
-        } else if (entity.equals("")) {
-
+        } else if (entity.equals("AdministrationRoute")) {
+            AdministrationRouteService cs = new AdministrationRouteRepository();
+            FindAdministrationRoutesUC fcsuc = new FindAdministrationRoutesUC(cs);
+            FindAdministrationRouteByNameUc fciduc = new FindAdministrationRouteByNameUc(cs);
+            DeleteAdministrationRouteUC dcuc = new DeleteAdministrationRouteUC(cs);
+            AdministrationRouteUI uiAdministrationRoute = new AdministrationRouteUI(dcuc, fcsuc, fciduc);
+            uiAdministrationRoute.DeleteAdministrationRoute();
+        } else if (entity.equals("ActiveIngredient")) {
+            ActiveIngredientService cs = new ActiveIngredientRepository();
+            FindActiveIngredientsUC fcsuc = new FindActiveIngredientsUC(cs);
+            FindActiveIngredientByNameUC fciduc = new FindActiveIngredientByNameUC(cs);
+            DeleteActiveIngredientUC dcuc = new DeleteActiveIngredientUC(cs);
+            ActiveIngredientUI uiActiveIngredient = new ActiveIngredientUI(dcuc, fcsuc, fciduc);
+            uiActiveIngredient.DeleteActiveIngredient();
+        } else if (entity.equals("UnitOfMeasure")) {
+            UnitOfMeasureService cs = new UnitOfMeasureRepository();
+            FindUnitOfMeasuresUC fcsuc = new FindUnitOfMeasuresUC(cs);
+            FindUnitOfMeasureByNameUC fciduc = new FindUnitOfMeasureByNameUC(cs);
+            DeleteUnitOfMeasureUC dcuc = new DeleteUnitOfMeasureUC(cs);
+            UnitOfMeasureUI uiUnitOfMeasure = new UnitOfMeasureUI(dcuc, fcsuc, fciduc);
+            uiUnitOfMeasure.DeleteUnitOfMeasure();
         }
     }
-
-    // ... other handler methods
-
-    // public static void main(String[] args) {
-    //     SwingUtilities.invokeLater(PharmacyUI::new);
-    // }
 }
 
